@@ -28,7 +28,7 @@ jobs:
       
     
      # https://github.com/marketplace/actions/build-and-push-docker-images
-      - name: Build and push Docker images
+      - name: Build and push
         uses: docker/build-push-action@v3
         with:
           push: true
