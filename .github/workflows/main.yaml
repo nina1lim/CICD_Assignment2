@@ -9,10 +9,10 @@ on:
 
       steps:
         - name: Checkout the code from github repo
-          uses: actions/checkout@v2
+          uses: actions/checkout@v3
 
-        - name: Set up QEMU
-          uses: docker/setup-qemu-action@v2
+        #- name: Set up QEMU
+        #  uses: docker/setup-qemu-action@v2
       
       # https://github.com/marketplace/actions/docker-login
         - name: Login to DockerHub
