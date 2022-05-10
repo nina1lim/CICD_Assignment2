@@ -1,16 +1,17 @@
 name: CICD_Assignment2
 on:
-  push:
-    #types: [published]
-jobs:
+  release:
+    types: [published]
+
+  jobs:
   Push_To_Docker:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code from github repo
         uses: actions/checkout@v2
 
-      #- name: Set up QEMU
-      #  uses: docker/setup-qemu-action@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
       
       # https://github.com/marketplace/actions/docker-login
       - name: Login to DockerHub
@@ -25,29 +26,32 @@ jobs:
      
      # https://github.com/marketplace/actions/build-and-push-docker-images
      - name: Build and push Docker images
-       uses: 
-
-  Send notification to Slack:
-    runs-on: ubuntu-latest
-    steps: 
-      - name: Send custom JSON data to Slack workflow
-        id: slack
-        uses: slackapi/slack-github-action@v1.18.0
+        uses: docker/build-push-action@v3
         with:
-    # For posting a rich message using Block Kit
-        payload: |
-        {
-          "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
-          "blocks": [
-            {
-              "type": "section",
-              "text": {
-                "type": "mrkdwn",
-                "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-              }
-            }
-          ]
-        }
-    env:
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST }}
-      SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          push: true
+          tags: nina1lim/randnum:v1.0
+
+  # Send notification to Slack:
+  #   runs-on: ubuntu-latest
+  #   steps: 
+  #     - name: Send custom JSON data to Slack workflow
+  #       id: slack
+  #       uses: slackapi/slack-github-action@v1.18.0
+  #       with:
+  #   # For posting a rich message using Block Kit
+  #       payload: |
+  #       {
+  #         "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+  #         "blocks": [
+  #           {
+  #             "type": "section",
+  #             "text": {
+  #               "type": "mrkdwn",
+  #               "text": "${{ secrets.NOTIFY_NAME }} \n ${{ secrets.NOTIFY_EMAIL }} \n ${{ secrets.NOTIFY_MATRIC }} \n ${{ secrets.NOTIFY_REPO }} \n ${{ secrets.NOTIFY_IMAGENAME }} \n ${{  }}"
+  #             }
+  #           }
+  #         ]
+  #       }
+  #   env:
+  #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST }}
+  #     SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
